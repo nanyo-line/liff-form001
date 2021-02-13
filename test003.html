@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="jp" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XP LIFF</title>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+      liff
+        .init({
+          liffId: '1655648364-Xj3QM49o'
+        })
+        .then(() => {
+          document.getElementById('go').addEventListener('click', () => {
+            if (!liff.isInClient()) {
+              document.getElementById('log').value += 'ng\n';
+            } else {
+              liff.sendMessages([{
+                'type': 'template',
+                'altText': document.getElementById('AltText').value,
+                'template': {
+                  'type': 'confirm',
+                  'text': document.getElementById('Text').value,
+                  'actions': [{
+                    'type': 'uri',
+                    'label': document.getElementById('Label1').value,
+                    'uri': document.getElementById('Uri1').value
+                  },{
+                    'type': 'uri',
+                    'label': document.getElementById('Label2').value,
+                    'uri': document.getElementById('Uri2').value
+                  }]
+                }
+              }]).then(function() {
+                document.getElementById('log').value += 'completed\n';
+              }).catch(function(error) {
+                document.getElementById('log').value += error + '\n';
+              });
+            }
+          });
+        })
+        .catch((err) => {
+          document.getElementById('log').value = 'init ng\n' + err;
+        });
+    });
+    </script>
+  </head>
+  <body>
+    <div>
+      <h3>確認</h3>
+      <div>altText<input type="text" id="AltText" value="確認"/></div>
+      <div>text<input type="text" id="Text" value="Googleを開きますか？"/></div>
+      <div>label1<input type="text" id="Label1" value="はい"/></div>
+      <div>uri1<input type="text" id="Uri1" value="https://www.google.co.jp"/></div>
+      <div>label2<input type="text" id="Label2" value="いいえ"/></div>
+      <div>uri2<input type="text" id="Uri2" value="https://www.x-power.co.jp/"/></div>
+      <input type="button" id="go" value="実行"/>
+      <textarea id="log" style="width:96%;height:100px;"></textarea>
+    </div>
+  </body>
+</html>
